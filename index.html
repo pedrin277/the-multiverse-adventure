@@ -2,6 +2,10 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Multiverse Adventure</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{color-scheme:light}
 *{box-sizing:border-box;margin:0}
@@ -315,5 +319,6 @@ function menu(){
 $("mb").onclick=menu;
 refreshCont();
 $("rb").onclick=turn;
+if("serviceWorker" in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body></html>
