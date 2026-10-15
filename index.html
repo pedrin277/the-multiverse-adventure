@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Multiverse Adventure</title>
+<style>
+:root{color-scheme:light}
+*{box-sizing:border-box;margin:0}
+html,body{height:auto}
+body{font-family:Georgia,"Times New Roman",serif;background:#0f172a;color:#fff;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.scr{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;position:relative;overflow:hidden}
+[hidden]{display:none!important}
+#s1{background:linear-gradient(#5bb4ee,#d8f0ff)}
+#s2{background:linear-gradient(#1e3a5f,#7ec8f5)}
+h1{font-size:clamp(34px,9vw,56px);color:#fff;text-shadow:0 3px 0 #1d4f7a;line-height:1.05;z-index:2}
+h2{font-size:28px;z-index:2}
+.btn{z-index:2;padding:14px 36px;font:700 20px Georgia,serif;border:0;border-radius:14px;background:#f59e0b;color:#1b1b1b;box-shadow:0 4px 0 #b45309;cursor:pointer}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #b45309}
+.btn:focus-visible,.opt:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.cl{position:absolute;font-size:70px;animation:dr 40s linear infinite;opacity:.95}
+@keyframes dr{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
+.mt{position:absolute;bottom:0;left:0;width:100%;height:38%}
+.dice{font-size:92px;z-index:2;cursor:pointer;line-height:1;animation:bob 2.4s ease-in-out infinite}
+.dice.spin{animation:sp .6s}
+@keyframes bob{50%{transform:translateY(-10px)}}
+@keyframes sp{to{transform:rotate(720deg) scale(1.2)}}
+.pc{display:flex;gap:10px;z-index:2}
+.pc button{width:60px;height:60px;border-radius:50%;border:3px solid #fff;background:#0f172a99;color:#fff;font:700 24px Georgia,serif;cursor:pointer}
+.pc button.on{background:#f59e0b;color:#1b1b1b}
+#s3{height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column}
+#bar{z-index:5;background:#0f172a;padding:4px calc(12px + env(safe-area-inset-right,0px)) 4px calc(12px + env(safe-area-inset-left,0px));display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+#pl{display:flex;gap:6px;flex-wrap:wrap}
+#mb{padding:6px 18px;font:700 16px Georgia,serif;border:0;border-radius:12px;background:#334155;color:#fff;cursor:pointer}
+#mb:disabled{opacity:.5}
+#rb{justify-self:end}
+#bw{flex:1;min-height:0;overflow:auto;padding:0 12px;-webkit-overflow-scrolling:touch}
+.p{display:flex;align-items:center;gap:4px;font-size:13px;padding:3px 8px;border-radius:20px;border:2px solid transparent;opacity:.6}
+.p.me{opacity:1;border-color:#fff;background:#ffffff22}
+.p i{width:12px;height:12px;border-radius:50%;display:block;border:2px solid #fff}
+#rb{font-size:30px;background:#f59e0b;border:0;border-radius:12px;padding:2px 12px;cursor:pointer;line-height:1.2}
+#rb:disabled{opacity:.5}
+#msg{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:6;max-width:80vw;background:#000c;padding:6px 16px;border-radius:20px;font-size:14px;text-align:center;pointer-events:none}
+#msg:empty{display:none}
+#fr{position:relative;width:max-content;margin:8px auto 16px;border:8px solid #c58a2b;border-radius:22px;box-shadow:0 0 0 3px #3b2410,inset 0 0 0 3px #3b2410,0 12px 30px #000a;overflow:hidden;background:#222}
+.bn{position:relative;border-top:3px solid #0005}
+.sc{position:relative;height:64px;overflow:hidden}
+.sc span{position:absolute;line-height:1;filter:drop-shadow(0 2px 2px #0007)}
+.lb{position:absolute;left:10px;top:6px;z-index:1;font-size:13px;background:#0008;padding:2px 10px;border-radius:10px;color:#fff}
+.rw{display:grid;grid-template-columns:repeat(15,64px);gap:4px;padding:4px 12px 12px}
+.cell{height:76px;min-width:0;border-radius:8px;position:relative;display:flex;align-items:flex-start;justify-content:center;padding-top:15px;font-size:22px;border:2px solid #ffffffaa}
+.n{position:absolute;top:2px;left:6px;font-size:11px;font-weight:700;text-shadow:0 1px 2px #000}
+.dec{opacity:.7}
+.cell.sp{border:3px solid #fde047;box-shadow:inset 0 0 12px #fde047aa}
+.cell.cur{outline:4px solid #fff;outline-offset:1px;z-index:2}
+.tk{position:absolute;bottom:3px;left:0;right:0;display:flex;gap:2px;justify-content:center;flex-wrap:wrap}
+.t{width:28px;height:28px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #000,0 3px 6px #000b;font:700 14px/22px system-ui,sans-serif;text-align:center;font-style:normal}
+.tk[data-n="2"] .t{width:26px;height:26px;font-size:13px;line-height:20px}
+.tk[data-n="3"] .t,.tk[data-n="4"] .t,.tk[data-n="5"] .t{width:18px;height:18px;font-size:10px;line-height:12px;border-width:2px}
+.t.now{animation:pl 1s ease-in-out infinite}
+@keyframes pl{50%{transform:scale(1.2)}}
+.mo{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}
+.cd{background:#fffdf5;color:#1b1b1b;border-radius:18px;padding:18px;max-width:560px;max-height:94vh;overflow:auto;width:100%;text-align:center;display:flex;flex-direction:column;gap:10px}
+.cd h3{font-size:22px}
+.opt{padding:12px;border-radius:12px;border:2px solid #1b1b1b;background:#fff;color:#1b1b1b;font:18px Georgia,serif;cursor:pointer}
+.opt.ok{background:#86efac}.opt.no{background:#fca5a5}
+#cont{background:#e2e8f0;box-shadow:0 4px 0 #94a3b8}
+#rot{position:fixed;inset:0;z-index:50;background:#0f172a;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;font-size:20px;padding:24px}
+#rot .ph{font-size:72px;animation:rt 2.4s ease-in-out infinite}
+@keyframes rt{50%{transform:rotate(-90deg)}}
+@media(orientation:portrait) and (max-width:700px){#rot{display:flex}}
+@media(max-height:520px){.scr{gap:8px;padding:12px}h1{font-size:38px}h1 br{display:none}.dice{font-size:60px}.btn{padding:10px 28px;font-size:18px}.pc button{width:52px;height:52px}}
+.os{display:flex;flex-wrap:wrap;gap:8px}
+.os .opt{flex:1 1 130px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body>
+
+<section id="s1" class="scr">
+<span class="cl" style="top:8%;animation-delay:-5s">☁️</span>
+<span class="cl" style="top:22%;font-size:48px;animation-duration:55s;animation-delay:-30s">☁️</span>
+<span class="cl" style="top:34%;animation-duration:48s;animation-delay:-18s">☁️</span>
+<h1>The Multiverse<br>Adventure</h1>
+<div class="dice" id="d1" title="Girar dado">🎲</div>
+<button class="btn" id="play">Jogar</button>
+<button class="btn" id="cont" hidden>Continuar jogo salvo</button>
+<svg class="mt" viewBox="0 0 400 150" preserveAspectRatio="none" aria-hidden="true">
+<polygon points="0,150 0,90 70,30 130,95 190,45 260,110 320,40 400,100 400,150" fill="#7b8fa6"/>
+<polygon points="0,150 0,120 60,75 120,125 200,70 280,130 350,85 400,120 400,150" fill="#4b5f78"/>
+<polygon points="60,75 48,90 60,86 70,92" fill="#fff"/><polygon points="200,70 187,88 200,83 212,90" fill="#fff"/>
+</svg>
+</section>
+
+<section id="s2" class="scr" hidden>
+<h2>Quantos jogadores?</h2>
+<div class="pc" id="pc"></div>
+<button class="btn" id="go">Começar</button>
+</section>
+
+<section id="s3" hidden>
+<div id="bar"><div id="pl"></div><button id="mb">☰ Menu</button><button id="rb" aria-label="Jogar dado">🎲</button></div>
+<div id="msg"></div>
+<div id="bw"><div id="fr"><div id="bd"></div></div></div>
+</section>
+
+<div id="rot"><span class="ph">📱</span><p>Gire o celular para jogar na horizontal</p></div>
+<div class="mo" id="mo" hidden><div class="cd" id="cd"></div></div>
+
+<script>
+const Q=`Past of "go"?|went|goed|gone
+Opposite of "hot"?|cold|warm|big
+"Dog" in Portuguese?|cachorro|gato|cavalo
+Plural of "child"?|children|childs|childes
+"I ___ a student."|am|is|are
+Color of the sky?|blue|green|red
+Meaning of "happy"?|feliz|triste|bravo
+"She ___ to school."|goes|go|going
+Past of "eat"?|ate|eated|eaten
+"Apple" is a...|fruit|animal|color
+Number after nine?|ten|eight|eleven
+"Thank you" means...|obrigado|desculpe|por favor
+Opposite of "big"?|small|tall|long
+"They ___ playing."|are|is|am
+Day after Monday?|Tuesday|Sunday|Friday
+"Book" in Portuguese?|livro|caneta|mesa
+Plural of "mouse"?|mice|mouses|mices
+"He ___ a car."|has|have|having
+Past of "see"?|saw|seed|seen
+"Water" in Portuguese?|água|fogo|terra
+Opposite of "up"?|down|left|over
+Meaning of "house"?|casa|carro|escola
+"We ___ friends."|are|is|am
+Season after winter?|spring|autumn|summer
+Past of "have"?|had|haved|has
+"Milk" comes from a...|cow|dog|bird
+Opposite of "fast"?|slow|quick|hard
+"Good morning" is a...|greeting|color|number
+Plural of "foot"?|feet|foots|feets
+"I ___ pizza."|like|likes|liking
+Color of grass?|green|purple|pink
+Past of "write"?|wrote|writed|written
+"Sun" in Portuguese?|sol|lua|estrela
+Opposite of "open"?|closed|full|wide
+"How ___ are you?"|old|many|much
+Meaning of "friend"?|amigo|inimigo|vizinho
+"There ___ a cat."|is|are|am
+Past of "run"?|ran|runned|runs
+Number of days in a week?|seven|five|ten
+"Night" is the opposite of...|day|moon|dark
+"Brother" is a...|family member|fruit|place
+"Cold" in Portuguese?|frio|quente|seco
+Plural of "man"?|men|mans|mens
+"She ___ not here."|is|are|do
+Past of "buy"?|bought|buyed|buys
+Opposite of "rich"?|poor|small|slow
+"Eyes" are used to...|see|hear|smell
+"Ears" are used to...|hear|taste|walk
+A "bird" can...|fly|drive|read
+A "fish" lives in...|water|desert|clouds
+Past of "drink"?|drank|drinked|drinks
+A "teacher" works at a...|school|farm|bakery
+"Hello" means...|olá|adeus|tchau
+"Bye" means...|tchau|bom dia|oi
+"Please" means...|por favor|desculpe|de nada
+"Sorry" means...|desculpe|obrigado|olá
+"Left" is the opposite of...|right|up|back
+Number between 4 and 6?|five|three|seven
+The "moon" appears at...|night|noon|morning
+"Summer" is usually...|hot|freezing|snowy
+Past of "take"?|took|taked|takes
+"My name ___ Ana."|is|are|am
+"Hand" in Portuguese?|mão|pé|olho
+"Black" is a...|color|day|food
+Opposite of "easy"?|difficult|simple|short
+"I ___ English."|speak|speaks|speaking
+"Bread" in Portuguese?|pão|queijo|leite
+Plural of "tooth"?|teeth|tooths|teethes
+Past of "come"?|came|comed|comes
+"Big" means...|grande|pequeno|rápido
+Rain falls from...|clouds|trees|rocks
+"Winter" is usually...|cold|hot|tropical
+"Girl" is the opposite of...|boy|mother|baby
+"___ you like tea?"|Do|Does|Are
+Past of "give"?|gave|gived|gives
+"Heart" in Portuguese?|coração|cabeça|braço
+A "chair" is used to...|sit|swim|cook
+"Beautiful" means...|bonito|feio|forte
+"Tomorrow" means...|amanhã|ontem|hoje
+"Yesterday" means...|ontem|amanhã|agora
+Plural of "box"?|boxes|boxs|boxen
+"He ___ TV now."|is watching|watching|watched
+Past of "know"?|knew|knowed|knows
+"Strong" means...|forte|fraco|baixo
+"Window" in Portuguese?|janela|porta|parede
+"Money" is used to...|buy|sleep|swim
+A "cat" says...|meow|woof|moo
+A "cow" says...|moo|meow|quack
+Three + two =|five|four|six
+Ten - four =|six|five|seven
+Past of "sleep"?|slept|sleeped|sleeps
+"Night" in Portuguese?|noite|dia|tarde
+"Fire" in Portuguese?|fogo|gelo|vento
+"Wind" in Portuguese?|vento|chuva|neve
+Two times three =|six|five|eight
+Past of "think"?|thought|thinked|thinks
+"Long" is the opposite of...|short|wide|high
+"Good night" is said at...|bedtime|breakfast|lunch
+"Mother" in Portuguese?|mãe|pai|irmã
+"Star" in Portuguese?|estrela|sol|planeta`.split("\n").map(l=>{const[q,a,...w]=l.split("|");return{q,a,o:[a,...w]}});
+
+const B=[{n:"Pântano",c:"#2f5d3a",c2:"#3f7a4a",d:["🌿","🐸","🍄","🪷"],bg:"rgba(6,26,12,.82)",x:["🌳","🐸","🍄","🪷","🦆","🌾","🐊","🌳","🦋","🌿","🍄","🪵"]},
+{n:"Lava",c:"#7a2318",c2:"#b43a1a",d:["🌋","🔥","🪨"],bg:"rgba(45,8,4,.82)",x:["🌋","🔥","🦇","🪨","🌋","🔥","🐉","💎","🔥","🌋","🦇","🪨"]},
+{n:"Céu",c:"#4a9ae0",c2:"#8fd0ff",d:["☁️","🌈","🕊️"],bg:"rgba(14,44,92,.8)",x:["☁️","🌈","🕊️","🎈","☁️","🪁","☁️","🦅","🌤️","🎈","☁️","🕊️"]},
+{n:"Galáxia",c:"#1d1650",c2:"#3a2b7a",d:["⭐","🪐","🌙","☄️"],bg:"rgba(6,3,28,.85)",x:["🪐","⭐","🚀","🌙","☄️","🛸","⭐","🌌","🪐","⭐","👽","🌠"]}];
+const ADV=[4,13,26,38,52],BACK=[7,19,33,47,57],CARD=[10,22,29,41,55];
+const COL=["#ef4444","#3b82f6","#facc15","#22c55e","#a855f7"];
+const $=id=>document.getElementById(id),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const FACE="⚀⚁⚂⚃⚄⚅";
+let N=2,pos=[],cur=0,busy=false,deck=[];
+
+function show(id){["s1","s2","s3"].forEach(s=>$(s).hidden=s!==id);scrollTo(0,0);if(id==="s1")refreshCont()}
+$("d1").onclick=e=>{const d=e.currentTarget;d.classList.remove("spin");void d.offsetWidth;d.classList.add("spin")};
+$("play").onclick=()=>{lock();show("s2")};
+$("pc").innerHTML=[2,3,4,5].map(n=>`<button data-n="${n}" aria-label="${n} jogadores">${n}</button>`).join("");
+const pcs=[...$("pc").children];
+function pick(n){N=n;pcs.forEach(b=>b.classList.toggle("on",+b.dataset.n===n))}
+pcs.forEach(b=>b.onclick=()=>pick(+b.dataset.n));pick(2);
+$("go").onclick=()=>start();
+
+function build(){
+ let h="";
+ for(let k=3;k>=0;k--){
+  const b=B[k];
+  h+=`<div class="bn" style="background:linear-gradient(${b.c2},${b.c})"><div class="sc"><b class="lb">${b.n}</b>${b.x.concat(b.x).slice(0,16).map((e,j)=>`<span style="left:${j*5.5+9}%;top:${(j*37)%40}%;font-size:${30+(j*7)%14}px">${e}</span>`).join("")}</div><div class="rw">`;
+  for(let j=0;j<15;j++){
+   const i=k*15+j,col=(k%2===0?j:14-j)+1;
+   const sp=ADV.includes(i)?"⏩":BACK.includes(i)?"⏪":CARD.includes(i)?"❓":"";
+   const ic=i===0?"🏁":i===59?"🏆":sp||`<span class="dec">${b.d[i%b.d.length]}</span>`;
+   h+=`<div class="cell ${sp?"sp":""}" id="c${i}" style="grid-column:${col};grid-row:1;background:${b.bg}"><span class="n">${i+1}</span><span>${ic}</span><div class="tk"></div></div>`;
+  }
+  h+=`</div></div>`;
+ }
+ $("bd").innerHTML=h;
+}
+function render(){
+ document.querySelectorAll(".tk").forEach(t=>{t.innerHTML="";t.dataset.n=0});document.querySelectorAll(".cell.cur").forEach(c=>c.classList.remove("cur"));
+ pos.forEach((p,i)=>{const k=$("c"+p).querySelector(".tk");k.dataset.n=+k.dataset.n+1;k.insertAdjacentHTML("beforeend",`<i class="t${i===cur?" now":""}" style="background:${COL[i]};color:${i===2?"#111":"#fff"}">${i+1}</i>`)});$("c"+pos[cur]).classList.add("cur");
+ $("pl").innerHTML=pos.map((p,i)=>`<div class="p ${i===cur?"me":""}"><i style="background:${COL[i]}"></i>${i+1}</div>`).join("");
+}
+function msg(t){$("msg").textContent=t}
+function start(sv){
+ if(sv){N=sv.N;pos=sv.pos;cur=sv.cur}else{pos=Array(N).fill(0);cur=0}
+ busy=false;deck=[];build();render();show("s3");
+ $("rb").disabled=false;$("mb").disabled=false;$("rb").textContent="🎲";
+ msg(`Vez do Jogador ${cur+1}. Toque no dado!`);setTimeout(focusCell,150);
+}
+function focusCell(){$("c"+pos[cur]).scrollIntoView({block:"center",inline:"center",behavior:"smooth"})}
+async function move(n){
+ const st=n>0?1:-1;
+ for(let k=0;k<Math.abs(n);k++){
+  pos[cur]=Math.max(0,Math.min(59,pos[cur]+st));render();focusCell();await sleep(260);
+  if(pos[cur]===59)return;
+ }
+}
+function ask(){
+ return new Promise(res=>{
+  if(!deck.length)deck=[...Q].sort(()=>Math.random()-.5);
+  const c=deck.pop(),o=[...c.o].sort(()=>Math.random()-.5);
+  $("cd").innerHTML=`<h3>📜 Carta</h3><p style="font-size:20px">${c.q}</p>`+`<div class="os">`+o.map(x=>`<button class="opt">${x}</button>`).join("")+`</div>`;
+  $("mo").hidden=false;
+  $("cd").querySelectorAll(".opt").forEach(b=>b.onclick=async()=>{
+   $("cd").querySelectorAll(".opt").forEach(x=>{x.onclick=null;if(x.textContent===c.a)x.classList.add("ok")});
+   const ok=b.textContent===c.a;if(!ok)b.classList.add("no");
+   await sleep(1200);$("mo").hidden=true;res(ok);
+  });
+ });
+}
+async function turn(){
+ if(busy)return;busy=true;$("rb").disabled=true;$("mb").disabled=true;
+ const n=1+Math.floor(Math.random()*6);
+ for(let k=0;k<8;k++){$("rb").textContent=FACE[Math.floor(Math.random()*6)];await sleep(70)}
+ $("rb").textContent=FACE[n-1];
+ const nm="Jogador "+(cur+1);
+ msg(`${nm} tirou ${n}`);
+ await move(n);
+ const p=pos[cur];
+ if(p<59){
+  if(ADV.includes(p)){msg(`${nm} caiu em ⏩ e avança 2 casas`);await sleep(600);await move(2)}
+  else if(BACK.includes(p)){msg(`${nm} caiu em ⏪ e volta 2 casas`);await sleep(600);await move(-2)}
+  else if(CARD.includes(p)){msg(`${nm} puxou uma carta`);await sleep(400);
+   if(await ask()){msg("Resposta certa! Avança 1 casa");await move(1)}else msg("Resposta errada. Fica na mesma casa")}
+ }
+ if(pos[cur]>=59)return win();
+ cur=(cur+1)%N;render();msg(`Vez do Jogador ${cur+1}`);
+ busy=false;$("rb").disabled=false;$("mb").disabled=false;
+}
+function win(){
+ $("cd").innerHTML=`<h3>🏆 Jogador ${cur+1} venceu!</h3><button class="opt" id="again">Jogar de novo</button>`;
+ $("mo").hidden=false;
+ $("again").onclick=()=>{$("mo").hidden=true;show("s1")};
+}
+const KEY="jb_save";
+function lock(){try{const e=document.documentElement;const p=e.requestFullscreen?e.requestFullscreen():Promise.reject();p.then(()=>screen.orientation.lock("landscape")).catch(()=>{})}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));return s&&s.pos&&s.pos.length>=2?s:null}catch(e){return null}}
+function refreshCont(){$("cont").hidden=!load()}
+function saveGame(){try{localStorage.setItem(KEY,JSON.stringify({N,pos,cur}));return true}catch(e){return false}}
+$("cont").onclick=()=>{const s=load();if(s){lock();start(s)}};
+function menu(){
+ $("cd").innerHTML=`<h3>Menu</h3><div class="os"><button class="opt" id="m1">▶ Continuar</button><button class="opt" id="m2">💾 Salvar jogo</button><button class="opt" id="m3">🚪 Sair sem salvar</button></div>`;
+ $("mo").hidden=false;
+ $("m1").onclick=()=>{$("mo").hidden=true};
+ $("m2").onclick=()=>{$("mo").hidden=true;msg(saveGame()?"Jogo salvo!":"Não foi possível salvar neste navegador")};
+ $("m3").onclick=()=>{
+  $("cd").innerHTML=`<h3>Sair sem salvar?</h3><p>O progresso desta partida será perdido.</p><div class="os"><button class="opt" id="y">Sair</button><button class="opt" id="n">Voltar</button></div>`;
+  $("n").onclick=menu;$("y").onclick=()=>{$("mo").hidden=true;show("s1")};
+ };
+}
+$("mb").onclick=menu;
+refreshCont();
+$("rb").onclick=turn;
+</script>
+</body></html>
