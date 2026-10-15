@@ -1,2 +1,2 @@
 # the-multiverse-adventure
-é um jogo de tabuleiro
+é um jogo de tabuleiro digital
